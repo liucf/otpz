@@ -2,6 +2,19 @@
 
 All notable changes to `otpz` will be documented in this file.
 
+## v0.5.0 - 2025-11-10
+
+### What's Changed
+
+* Replace email with actual user email address by @itCarl in https://github.com/benbjurstrom/otpz/pull/26
+* Add logo to template by @benbjurstrom in https://github.com/benbjurstrom/otpz/pull/29
+
+### New Contributors
+
+* @itCarl made their first contribution in https://github.com/benbjurstrom/otpz/pull/26
+
+**Full Changelog**: https://github.com/benbjurstrom/otpz/compare/v0.4.0...v0.5.0
+
 ## v0.4.0 - 2025-03-14
 
 ### What's Changed
