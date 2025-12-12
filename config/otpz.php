@@ -14,6 +14,12 @@ return [
 
     'expiration' => 5, // Minutes
 
+    'code_length' => 10, // Characters (displayed with hyphen in middle, e.g., 10 = XXXXX-XXXXX)
+
+    'only_numeric' => false, // If true, codes will only contain numeric characters
+
+    'middle_hyphen' => true, // If true, a hyphen will be added in the middle of the code
+
     'limits' => [
         ['limit' => 1, 'minutes' => 1],
         ['limit' => 3, 'minutes' => 5],

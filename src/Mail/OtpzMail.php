@@ -27,7 +27,7 @@ class OtpzMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Sign in to '.config('app.name'),
+            subject: config('app.name'). ' Verification Code',
         );
     }
 
@@ -39,7 +39,13 @@ class OtpzMail extends Mailable
         $email = $this->otp->user->email;
 
         // Format the code with hyphens for readability
-        $formattedCode = substr_replace($this->code, '-', 5, 0);
+        $middleHyphen = config('otpz.middle_hyphen', true);
+        if ($middleHyphen){
+            $codeLength = config('otpz.code_length', 10);
+            $formattedCode = substr_replace($this->code, '-', $codeLength / 2, 0);
+        } else {
+            $formattedCode = $this->code;
+        }
 
         $template = config('otpz.template', 'otpz::mail.otpz');
 
