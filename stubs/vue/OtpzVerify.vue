@@ -14,6 +14,8 @@ defineProps<{
     status?: string;
     email: string;
     url: string;
+    placeholder: string;
+    onlyNumeric: boolean;
 }>();
 
 const page = usePage();
@@ -57,7 +59,7 @@ const submit = () => {
 <template>
     <AuthBase
         title="Use your code to login"
-        :description="`Enter the login code that was sent to ${email} Note that the code is case insensitive.`"
+        :description="`Enter the login code that was sent to ${email} ${onlyNumeric ? '' : '. Note that the code is case insensitive.'}`"
     >
         <Head title="Enter Code" />
 
@@ -78,7 +80,7 @@ const submit = () => {
                         :maxlength="11"
                         autocomplete="off"
                         v-model="form.code"
-                        placeholder="xxxxx-xxxxx"
+                        :placeholder="placeholder"
                         class="text-center uppercase placeholder:lowercase"
                     />
                     <InputError :message="form.errors.code" />

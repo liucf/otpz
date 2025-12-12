@@ -95,9 +95,19 @@ class OtpzController extends Controller
             ],
         );
 
+        $codeLength = config('otpz.code_length', 10);
+        $onlyNumeric = config('otpz.only_numeric', false);
+        $middleHyphen = config('otpz.middle_hyphen', true);
+        $placeholder = str_repeat('X', $codeLength);
+        if ($middleHyphen) {
+            $placeholder = substr_replace($placeholder, '-', $codeLength / 2, 0);
+        }
+
         return Inertia::render('auth/OtpzVerify', [
             'email' => $otp->user->email,
             'url' => $url,
+            'placeholder' => $placeholder,
+            'onlyNumeric' => $onlyNumeric,
         ]);
     }
 
