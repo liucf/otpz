@@ -17,6 +17,9 @@ use BenBjurstrom\Otpz\Actions\AttemptOtp;
 new #[Layout('components.layouts.auth')] class extends Component {
     public $email = '';
     public $url = '';
+    public $codeLength = 10;
+    public $onlyNumeric = false;
+    public $middleHyphen = true;
 
     #[Validate('required|string')]
     public $code = '';
@@ -49,7 +52,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
 }; ?>
 
 <div class="flex flex-col gap-6">
-    <x-auth-header title="Use your code to login" description="Enter the login code that was sent to {{ $email }}. Note that the code is case insensitive." />
+    <x-auth-header
+    title="Use your code to login"
+    @if($onlyNumeric)
+        description="Enter the login code that was sent to {{ $email }}."
+    @else
+        description="Enter the login code that was sent to {{ $email }}. Note that the code is case insensitive."
+    @endif
+    />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -59,7 +69,41 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <flux:field>
             <flux:label>Login Code</flux:label>
 
-            <input type="text" class="w-full text-center border rounded-lg block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] pl-3 pr-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 uppercase placeholder:lowercase" wire:model="code" label="Code" required="required" autofocus="autofocus" placeholder="xxxxx-xxxxx" autocomplete="off" maxlength="11" name="code" x-mask="*****-*****" data-flux-control="" data-flux-group-target="">
+            <input type="text"
+            class="w-full text-center border rounded-lg block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] pl-3 pr-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 uppercase placeholder:lowercase" wire:model="code" label="Code" required="required" autofocus="autofocus"
+            {{-- placeholder based on config if middle hyphen is true or false  and code length --}}
+            @if($middleHyphen)
+                @php
+                    $halfLength = intval($codeLength / 2);
+                    $placeholder = str_repeat('x', $halfLength) . '-' . str_repeat('x', $halfLength);
+                @endphp
+            @else
+                @php
+                    $placeholder = str_repeat('x', $codeLength);
+                @endphp
+            @endif
+            placeholder="{{ $placeholder }}"
+
+            autocomplete="off" maxlength="11" name="code"
+            @if($onlyNumeric)
+                data-flux-input="numeric"
+            @endif
+
+            {{-- x-mask based on middle hyphen and code length --}}
+            @if($middleHyphen)
+                @php
+                    $halfLength = intval($codeLength / 2);
+                    $mask = str_repeat('*', $halfLength) . '-' . str_repeat('9', $halfLength);
+                @endphp
+                x-mask="{{ $mask }}"
+            @else
+                @php
+                    $mask = str_repeat('*', $codeLength);
+                @endphp
+                x-mask="{{ $mask }}"
+            @endif
+            data-flux-control=""
+            data-flux-group-target="">
 
             <flux:error name="code" />
         </flux:field>

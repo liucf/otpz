@@ -98,6 +98,9 @@ class OtpzController extends Controller
         return Inertia::render('auth/otpz-verify', [
             'email' => $otp->user->email,
             'url' => $url,
+            'codeLength' => config('otpz.code_length', 10),
+            'onlyNumeric' => config('otpz.only_numeric', false),
+            'middleHyphen' => config('otpz.middle_hyphen', true),
         ]);
     }
 
